@@ -35,6 +35,7 @@ namespace ring {
 // core's local exclusive monitor (the STM32H7 has no documented global one).
 // The consumer may run on the other core: it never does a read-modify-write
 // on a shared word, it only reads stamps and the head and stores the tail.
+// That is how the CM4 log channel works (ipc/shared_memory.h).
 //
 //   ring::MpscRing<2048, 64> ring;
 //   ring.Attach(storage);                     // before any producer runs

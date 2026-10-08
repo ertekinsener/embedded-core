@@ -1,5 +1,5 @@
-# Host-side tests for the hardware-independent code in shared/ (the lock-free
-# record ring). Not part of the firmware builds; configure
+# Host-side tests for the hardware-independent code in shared/ (TX/log ring,
+# formatter, logger front end). Not part of the firmware builds; configure
 # separately with the host compiler:
 #
 #   cmake -S shared/test -B build/host-test && cmake --build build/host-test
@@ -24,3 +24,10 @@ if(HOST_TEST_TSAN)
   target_link_options(mpsc_ring_test PRIVATE -fsanitize=thread)
 endif()
 add_test(NAME mpsc_ring_test COMMAND mpsc_ring_test)
+
+add_executable(
+  logging_test logging/logging_test.cc "${shared_dir}/source/logging/format.cc"
+               "${shared_dir}/source/logging/logger.cc")
+target_include_directories(logging_test PRIVATE "${shared_dir}/include")
+target_compile_options(logging_test PRIVATE -Wall -Wextra -O1 -g)
+add_test(NAME logging_test COMMAND logging_test)
