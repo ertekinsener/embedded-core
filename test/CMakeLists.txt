@@ -1,5 +1,6 @@
 # Host-side tests for the hardware-independent code in shared/ (TX/log ring,
-# formatter, logger front end, RFC 2217 codec of the Ethernet-UART bridge). Not part of the firmware builds; configure
+# formatter, logger front end, RFC 2217 codec of the Ethernet-UART bridge,
+# settings flash log). Not part of the firmware builds; configure
 # separately with the host compiler:
 #
 #   cmake -S shared/test -B build/host-test && cmake --build build/host-test
@@ -37,3 +38,9 @@ add_executable(rfc2217_test bridge/rfc2217_test.cc
 target_include_directories(rfc2217_test PRIVATE "${shared_dir}/include")
 target_compile_options(rfc2217_test PRIVATE -Wall -Wextra -O1 -g)
 add_test(NAME rfc2217_test COMMAND rfc2217_test)
+
+add_executable(flash_log_test storage/flash_log_test.cc
+                              "${shared_dir}/source/storage/flash_log.cc")
+target_include_directories(flash_log_test PRIVATE "${shared_dir}/include")
+target_compile_options(flash_log_test PRIVATE -Wall -Wextra -O1 -g)
+add_test(NAME flash_log_test COMMAND flash_log_test)
