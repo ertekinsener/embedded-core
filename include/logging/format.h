@@ -1,5 +1,5 @@
-#ifndef SHARED_INCLUDE_LOGGING_FORMAT_
-#define SHARED_INCLUDE_LOGGING_FORMAT_
+#ifndef EMBEDDED_CORE_INCLUDE_LOGGING_FORMAT_
+#define EMBEDDED_CORE_INCLUDE_LOGGING_FORMAT_
 
 #include <array>
 #include <concepts>
@@ -242,4 +242,4 @@ std::size_t FormatTo(std::span<char> buffer, FormatString<Args...> format,
 
 }  // namespace logging
 
-#endif  // SHARED_INCLUDE_LOGGING_FORMAT_
+#endif  // EMBEDDED_CORE_INCLUDE_LOGGING_FORMAT_

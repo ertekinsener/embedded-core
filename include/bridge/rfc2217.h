@@ -1,5 +1,5 @@
-#ifndef SHARED_INCLUDE_BRIDGE_RFC2217_
-#define SHARED_INCLUDE_BRIDGE_RFC2217_
+#ifndef EMBEDDED_CORE_INCLUDE_BRIDGE_RFC2217_
+#define EMBEDDED_CORE_INCLUDE_BRIDGE_RFC2217_
 
 #include <array>
 #include <cstddef>
@@ -88,8 +88,17 @@ class Session {
   // escaped, or a SIGNATURE).
   static constexpr std::size_t kMaxReplySize = 64;
 
-  Session(const LineSettings& current, const Handler& handler) noexcept
-      : settings_(current), handler_(handler) {}
+  // The SIGNATURE reported to clients is cut to this length, so that its
+  // answer (every byte escaped) fits kMaxReplySize.
+  static constexpr std::size_t kMaxSignatureSize = 24;
+  static constexpr std::string_view kDefaultSignature = "rfc2217";
+
+  // `signature` must outlive the session (e.g. a string literal).
+  Session(const LineSettings& current, const Handler& handler,
+          std::string_view signature = kDefaultSignature) noexcept
+      : settings_(current),
+        handler_(handler),
+        signature_(signature.substr(0, kMaxSignatureSize)) {}
 
   // The option offers to send when the connection opens (BINARY and
   // SUPPRESS-GO-AHEAD in both directions).
@@ -113,8 +122,7 @@ class Session {
   // FLOWCONTROL-SUSPEND from the client: stop sending it UART data.
   bool suspended() const noexcept { return suspended_; }
   const LineSettings& settings() const noexcept { return settings_; }
-
-  static constexpr std::string_view kSignature = "stm32_webserver";
+  std::string_view signature() const noexcept { return signature_; }
 
  private:
   enum class State : std::uint8_t {
@@ -143,6 +151,7 @@ class Session {
 
   LineSettings settings_;
   Handler handler_;
+  std::string_view signature_;
   State state_ = State::kData;
   std::array<std::uint8_t, 32> subnegotiation_{};
   std::size_t subnegotiation_size_ = 0;
@@ -156,4 +165,4 @@ class Session {
 
 }  // namespace rfc2217
 
-#endif  // SHARED_INCLUDE_BRIDGE_RFC2217_
+#endif  // EMBEDDED_CORE_INCLUDE_BRIDGE_RFC2217_

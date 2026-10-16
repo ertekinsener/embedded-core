@@ -1,5 +1,5 @@
-#ifndef SHARED_INCLUDE_RING_MPSC_RING_
-#define SHARED_INCLUDE_RING_MPSC_RING_
+#ifndef EMBEDDED_CORE_INCLUDE_RING_MPSC_RING_
+#define EMBEDDED_CORE_INCLUDE_RING_MPSC_RING_
 
 #include <array>
 #include <atomic>
@@ -35,7 +35,7 @@ namespace ring {
 // core's local exclusive monitor (the STM32H7 has no documented global one).
 // The consumer may run on the other core: it never does a read-modify-write
 // on a shared word, it only reads stamps and the head and stores the tail.
-// That is how the CM4 log channel works (ipc/shared_memory.h).
+// A log channel from a second core can work this way.
 //
 //   ring::MpscRing<2048, 64> ring;
 //   ring.Attach(storage);                     // before any producer runs
@@ -229,4 +229,4 @@ void MpscRing<kCapacity, kRecordSlots>::Release(const Batch& batch) noexcept {
 
 }  // namespace ring
 
-#endif  // SHARED_INCLUDE_RING_MPSC_RING_
+#endif  // EMBEDDED_CORE_INCLUDE_RING_MPSC_RING_

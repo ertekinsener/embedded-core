@@ -280,8 +280,8 @@ void Session::HandleComPort(std::uint8_t command,
     case kSignatureCommand:
       if (value.empty() && !subnegotiation_truncated_) {
         PushComPort(reply, answer,
-                    {reinterpret_cast<const std::uint8_t*>(kSignature.data()),
-                     kSignature.size()});
+                    {reinterpret_cast<const std::uint8_t*>(signature_.data()),
+                     signature_.size()});
       }
       return;  // A client's own signature needs no answer.
     case kSetBaudRate: {

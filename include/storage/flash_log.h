@@ -1,5 +1,5 @@
-#ifndef SHARED_INCLUDE_STORAGE_FLASH_LOG_
-#define SHARED_INCLUDE_STORAGE_FLASH_LOG_
+#ifndef EMBEDDED_CORE_INCLUDE_STORAGE_FLASH_LOG_
+#define EMBEDDED_CORE_INCLUDE_STORAGE_FLASH_LOG_
 
 #include <array>
 #include <cstddef>
@@ -101,4 +101,4 @@ std::uint32_t Crc32(std::span<const std::uint8_t> data,
 
 }  // namespace storage
 
-#endif  // SHARED_INCLUDE_STORAGE_FLASH_LOG_
+#endif  // EMBEDDED_CORE_INCLUDE_STORAGE_FLASH_LOG_

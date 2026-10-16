@@ -199,8 +199,8 @@ void TestComPort() {
   EXPECT(!session.suspended());
   EXPECT(Feed(session, ComPort(12, {1})).reply == ComPort(112, {1}));
   EXPECT(port.purges == 1 && port.purge_receive && !port.purge_transmit);
-  const Bytes signature(rfc2217::Session::kSignature.begin(),
-                        rfc2217::Session::kSignature.end());
+  const Bytes signature(session.signature().begin(),
+                        session.signature().end());
   EXPECT(Feed(session, ComPort(0, {})).reply == ComPort(100, signature));
   EXPECT(Feed(session, ComPort(0, {'p', 'c'})).reply.empty());
 
@@ -224,10 +224,25 @@ void TestComPort() {
 
 }  // namespace
 
+// The SIGNATURE is the application's, cut to kMaxSignatureSize.
+void TestSignature() {
+  FakePort port;
+  rfc2217::Session named({}, port.handler(), "device");
+  EXPECT(Feed(named, ComPort(0, {})).reply ==
+         ComPort(100, {'d', 'e', 'v', 'i', 'c', 'e'}));
+
+  rfc2217::Session long_name({}, port.handler(),
+                             "a signature longer than the limit");
+  EXPECT(long_name.signature().size() == rfc2217::Session::kMaxSignatureSize);
+  const Result result = Feed(long_name, ComPort(0, {}));
+  EXPECT(result.reply.size() <= rfc2217::Session::kMaxReplySize);
+}
+
 int main() {
   TestNegotiation();
   TestData();
   TestComPort();
+  TestSignature();
   if (failures != 0) {
     std::printf("%d check(s) failed\n", failures);
     return EXIT_FAILURE;

@@ -1,5 +1,5 @@
-#ifndef SHARED_INCLUDE_LOGGING_LOGGER_
-#define SHARED_INCLUDE_LOGGING_LOGGER_
+#ifndef EMBEDDED_CORE_INCLUDE_LOGGING_LOGGER_
+#define EMBEDDED_CORE_INCLUDE_LOGGING_LOGGER_
 
 #include <array>
 #include <cstddef>
@@ -100,4 +100,4 @@ void Debug(std::string_view tag, FormatString<Args...> format,
 
 }  // namespace logging
 
-#endif  // SHARED_INCLUDE_LOGGING_LOGGER_
+#endif  // EMBEDDED_CORE_INCLUDE_LOGGING_LOGGER_
